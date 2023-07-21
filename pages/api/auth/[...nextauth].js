@@ -13,5 +13,5 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
-  adaptor: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise),
 })
