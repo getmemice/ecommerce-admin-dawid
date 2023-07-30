@@ -61,6 +61,14 @@ const ProductForm = ({
     }
   }
 
+  const properties = []
+
+  if (categories.length > 0) {
+    const selCatInfo = categories.find(({ _id }) => _id === category)
+    console.log(selCatInfo.properties)
+  }
+  console.log("properties")
+
   return (
     <>
       <form onSubmit={saveProduct}>
@@ -75,7 +83,11 @@ const ProductForm = ({
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">Uncategorized</option>
           {!!categories.length &&
-            categories.map((c) => <option value={c._id}>{c.name}</option>)}
+            categories.map((c, i) => (
+              <option key={i} value={c._id}>
+                {c.name}
+              </option>
+            ))}
         </select>
         <label>Photos</label>
         <div className="flex flex-wrap mb-2 gap-1">
