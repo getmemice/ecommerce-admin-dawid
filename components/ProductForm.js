@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Spinner from "./Spinner"
 import { ReactSortable } from "react-sortablejs"
+import Image from "next/image"
 
 const ProductForm = ({
   _id,
@@ -12,12 +13,14 @@ const ProductForm = ({
   price: existingPrice,
   images: existingImages,
   category: existingCategory,
+  properties: existingProperty,
 }) => {
   const [title, setTitle] = useState(existingTitle || "")
   const [description, setDescription] = useState(existingDescription || "")
   const [price, setPrice] = useState(existingPrice || "")
   const [images, setImages] = useState(existingImages || [])
   const [category, setCategory] = useState(existingCategory || "")
+  const [property, setProperty] = useState(existingProperty || {})
   const [goToProducts, setGoToProducts] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [categories, setCategories] = useState([])
@@ -61,11 +64,27 @@ const ProductForm = ({
     }
   }
 
-  const properties = []
+  function updateProperty(name, value) {
+    setProperty((oldProperty) => {
+      const newProperty = { ...oldProperty }
+      newProperty.name = value
+      return newProperty
+    })
+  }
 
+  const propertiesToFill = []
   if (categories.length > 0) {
-    const selCatInfo = categories.find(({ _id }) => _id === category)
-    console.log(selCatInfo.properties)
+    const currentCat = categories.find(({ _id }) => _id === category)
+    console.log(currentCat.properties)
+    propertiesToFill.push(...currentCat.properties)
+
+    if (currentCat?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === currentCat?.parent?._id
+      )
+      propertiesToFill.push(...parentCat.properties)
+      // currentCat = parentCat
+    }
   }
   console.log("properties")
 
@@ -89,6 +108,23 @@ const ProductForm = ({
               </option>
             ))}
         </select>
+        {propertiesToFill.length > 0 &&
+          propertiesToFill.map((p, index) => (
+            <div className="flex" key={index}>
+              <div>{p.name}</div>
+              <select
+                value={property[p.name]}
+                onChange={(e) => updateProperty(p.name, e.target.value)}
+              >
+                {p.values.map((v, i) => (
+                  <option key={i} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+
         <label>Photos</label>
         <div className="flex flex-wrap mb-2 gap-1">
           <ReactSortable
@@ -99,7 +135,7 @@ const ProductForm = ({
             {!!images?.length &&
               images.map((link) => (
                 <div key={link} className="h-24 ">
-                  <img src={link} alt="" className="rounded-md" />
+                  <Image src={link} alt="" className="rounded-md" />
                 </div>
               ))}
           </ReactSortable>
