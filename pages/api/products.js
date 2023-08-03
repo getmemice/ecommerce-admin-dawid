@@ -15,24 +15,22 @@ const handle = async (req, res) => {
   }
 
   if (method === "POST") {
-    const { title, description, price, images, category, property } = req.body
+    const { title, description, price, images, category } = req.body
     const productDoc = await Product.create({
       title,
       description,
       price,
       images,
       category,
-      property,
     })
     res.json(productDoc)
   }
 
   if (method === "PUT") {
-    const { title, description, price, images, category, property, _id } =
-      req.body
+    const { title, description, price, images, category, _id } = req.body
     await Product.updateOne(
       { _id },
-      { title, description, price, images, category, property }
+      { title, description, price, images, category }
     )
     res.json(true)
   }
