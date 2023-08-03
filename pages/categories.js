@@ -20,8 +20,8 @@ function Categories({ swal }) {
     })
   }
 
-  async function saveCategory(ev) {
-    ev.preventDefault()
+  async function saveCategory(e) {
+    e.preventDefault()
     const data = {
       name,
       parentCategory,
@@ -115,11 +115,11 @@ function Categories({ swal }) {
           <input
             type="text"
             placeholder={"Category name"}
-            onChange={(ev) => setName(ev.target.value)}
+            onChange={(e) => setName(e.target.value)}
             value={name}
           />
           <select
-            onChange={(ev) => setParentCategory(ev.target.value)}
+            onChange={(e) => setParentCategory(e.target.value)}
             value={parentCategory}
           >
             <option value="">No parent category</option>
@@ -147,16 +147,16 @@ function Categories({ swal }) {
                   type="text"
                   value={property.name}
                   className="mb-0"
-                  onChange={(ev) =>
-                    handlePropertyNameChange(index, property, ev.target.value)
+                  onChange={(e) =>
+                    handlePropertyNameChange(index, property, e.target.value)
                   }
                   placeholder="property name (example: color)"
                 />
                 <input
                   type="text"
                   className="mb-0"
-                  onChange={(ev) =>
-                    handlePropertyValuesChange(index, property, ev.target.value)
+                  onChange={(e) =>
+                    handlePropertyValuesChange(index, property, e.target.value)
                   }
                   value={property.values}
                   placeholder="values, comma separated"
